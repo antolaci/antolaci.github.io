@@ -1,13 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Mobile Menu Toggle - Fixed Version
+    // Mobile Menu Toggle
     const menuToggle = document.getElementById('mobile-menu');
     const navList = document.querySelector('.nav-list');
     
-menuToggle.addEventListener('click', function() {
-    console.log('Menu toggle clicked'); // Debug line
-    this.classList.toggle('active');
-    navList.classList.toggle('active');
-});
+    menuToggle.addEventListener('click', function() {
+        this.classList.toggle('active');
+        navList.classList.toggle('active');
+    });
     
     // Close mobile menu when clicking on a link
     const navLinks = document.querySelectorAll('.nav-list a');
@@ -15,7 +14,6 @@ menuToggle.addEventListener('click', function() {
         link.addEventListener('click', function() {
             menuToggle.classList.remove('active');
             navList.classList.remove('active');
-            document.body.style.overflow = ''; // Re-enable scrolling
         });
     });
     
