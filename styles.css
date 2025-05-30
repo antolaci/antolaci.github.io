@@ -185,7 +185,8 @@ img {
 .menu-toggle {
     display: none;
     cursor: pointer;
-    z-index: 1001;
+    z-index: 1001; /* This is good, but let's make sure it's higher than navbar */
+    position: relative; /* Add this to ensure z-index works */
 }
 
 .bar {
@@ -1293,10 +1294,12 @@ img {
         display: block;
     }
 
-    .menu-toggle {
-        display: block;
-        z-index: 999;
-    }
+.menu-toggle {
+    display: none;
+    cursor: pointer;
+    z-index: 1001; /* This is good, but let's make sure it's higher than navbar */
+    position: relative; /* Add this to ensure z-index works */
+}
 
     .navbar.scrolled .nav-list {
         top: 70px;
