@@ -3,18 +3,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const menuToggle = document.getElementById('mobile-menu');
     const navList = document.querySelector('.nav-list');
     
-    menuToggle.addEventListener('click', function() {
-        // Toggle the 'active' class on both the menu button and nav list
-        this.classList.toggle('active');
-        navList.classList.toggle('active');
-        
-        // Toggle body overflow to prevent scrolling when menu is open
-        if (navList.classList.contains('active')) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
-        }
-    });
+menuToggle.addEventListener('click', function() {
+    console.log('Menu toggle clicked'); // Debug line
+    this.classList.toggle('active');
+    navList.classList.toggle('active');
+});
     
     // Close mobile menu when clicking on a link
     const navLinks = document.querySelectorAll('.nav-list a');
