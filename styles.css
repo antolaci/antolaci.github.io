@@ -1294,13 +1294,6 @@ img {
         display: block;
     }
 
-.menu-toggle {
-    display: none;
-    cursor: pointer;
-    z-index: 1001; /* This is good, but let's make sure it's higher than navbar */
-    position: relative; /* Add this to ensure z-index works */
-}
-
     .navbar.scrolled .nav-list {
         top: 70px;
         height: calc(100vh - 70px);
