@@ -1,8 +1,9 @@
-from fastapi import FastAPI, HTTPException, Depends, Request
+from fastapi import FastAPI, HTTPException, Depends, Request, status
 from fastapi.security import APIKeyHeader
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi_limiter import FastAPILimiter
-from fastapi_limiter.depends import RateLimiter
+from slowapi import Limiter
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
 import httpx
 from pydantic import BaseModel
 import os
@@ -12,25 +13,20 @@ from redis import asyncio as redis
 # Load environment variables
 load_dotenv()
 
+# Initialize FastAPI with rate limiting
 app = FastAPI()
+limiter = Limiter(key_func=get_remote_address)
+app.state.limiter = limiter
 
 # Security setup
 api_key_header = APIKeyHeader(name="X-API-Key")
 
-# Rate limiting setup (Redis required on Render.com)
-@app.on_event("startup")
-async def startup():
-    redis_url = os.getenv("REDIS_URL", "redis://localhost:6379")
-    redis_connection = redis.from_url(redis_url)
-    await FastAPILimiter.init(redis_connection)
-
-# Production CORS configuration (adjust to your GitHub Pages URL)
+# CORS configuration (adjust to your GitHub Pages URL)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://antolaci.github.io"],  # Your GH Pages domain
-    allow_credentials=True,
-    allow_methods=["POST"],  # Only allow POST for security
-    allow_headers=["X-API-Key", "Content-Type"],
+    allow_origins=["https://yourusername.github.io"],  # Your frontend URL
+    allow_methods=["POST"],
+    allow_headers=["X-API-Key", "Content-Type"]
 )
 
 # Configuration
@@ -41,6 +37,7 @@ class Config:
     SHELLY_CHANNEL = int(os.getenv("SHELLY_CHANNEL", "0"))
     TOGGLE_AFTER = int(os.getenv("TOGGLE_AFTER", "5"))
     API_KEYS = os.getenv("API_KEYS", "").split(",")
+    REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
 
 config = Config()
 
@@ -48,27 +45,46 @@ config = Config()
 class CodeValidationRequest(BaseModel):
     code: str
 
+# Redis connection for rate limiting
+@app.on_event("startup")
+async def startup():
+    app.state.redis = await redis.from_url(config.REDIS_URL)
+
 async def verify_api_key(api_key: str = Depends(api_key_header)):
     if api_key not in config.API_KEYS:
-        raise HTTPException(status_code=403, detail="Invalid API Key")
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Invalid API Key"
+        )
     return api_key
 
+@app.exception_handler(RateLimitExceeded)
+async def rate_limit_handler(request: Request, exc: RateLimitExceeded):
+    return HTTPException(
+        status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+        detail="Too many requests. Try again in 1 minute."
+    )
+
 @app.post("/api/validate-code")
-@RateLimiter(times=5, minutes=1)  # 5 attempts per minute
+@limiter.limit("5/minute")
 async def validate_code(
-    request: CodeValidationRequest,
+    request: Request,
+    validation_request: CodeValidationRequest,
     api_key: str = Depends(verify_api_key)
 ):
     if not config.CORRECT_CODE:
-        raise HTTPException(status_code=500, detail="Server misconfigured")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Server misconfigured"
+        )
     
-    if request.code != config.CORRECT_CODE:
+    if validation_request.code != config.CORRECT_CODE:
         return {"success": False, "message": "Invalid access code"}
     
     try:
         async with httpx.AsyncClient() as client:
             shelly_response = await client.post(
-                f"https://api.shelly.cloud/v2/devices/api/set/switch?auth_key={config.SHELLY_AUTH_KEY}",
+                f"https://https://shelly-124-eu.shelly.cloud/v2/devices/api/set/switch?auth_key={config.SHELLY_AUTH_KEY}",
                 json={
                     "id": config.SHELLY_DEVICE_ID,
                     "channel": config.SHELLY_CHANNEL,
@@ -95,7 +111,6 @@ async def validate_code(
             "message": f"Error communicating with door controller: {str(e)}"
         }
 
-# Health check endpoint for Render
 @app.get("/health")
 async def health_check():
-    return {"status": "healthy"}
+    return {"status": "healthy", "redis": "connected" if app.state.redis else "disconnected"}
