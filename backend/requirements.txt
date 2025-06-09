@@ -1,0 +1,7 @@
+fastapi==0.95.2
+httpx==0.24.1
+python-dotenv==1.0.0
+fastapi-limiter==1.4.1
+redis==4.5.5
+fastapi-limiter==1.4.1
+redis==4.5.5
