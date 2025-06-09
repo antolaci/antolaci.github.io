@@ -27,7 +27,7 @@ async def startup():
 # Production CORS configuration (adjust to your GitHub Pages URL)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://yourusername.github.io"],  # Your GH Pages domain
+    allow_origins=["https://antolaci.github.io"],  # Your GH Pages domain
     allow_credentials=True,
     allow_methods=["POST"],  # Only allow POST for security
     allow_headers=["X-API-Key", "Content-Type"],
