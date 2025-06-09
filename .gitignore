@@ -1,0 +1,2 @@
+// Generated during deployment - NEVER commit this
+window.API_KEY = '{{Hps0ls123}'; // Will be replaced by GitHub Actions
