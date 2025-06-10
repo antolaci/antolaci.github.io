@@ -197,9 +197,14 @@ async function checkCode() {
       }),
     });
 
-    // Handle non-JSON responses (Google Apps Script quirks)
-    const text = await response.text();
-    const result = JSON.parse(text);
+// First check if response is empty
+    const responseText = await response.text();
+    if (!responseText) {
+      throw new Error("Empty response from server");
+    }
+
+    // Then parse as JSON
+    const result = JSON.parse(responseText);
 
     if (!result.success) {
       throw new Error(result.message || "Invalid code");
