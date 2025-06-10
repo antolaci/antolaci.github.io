@@ -4,160 +4,167 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Secure Door Access Control</title>
-    <style>
+   <style>
     :root {
-        --white: #ffffff;
-        --black: #000000;
-        --wave-bg: #f5f5f5;           /* Light background */
-        --wave-card: #ffffff;         /* Card background */
-        --wave-dark: #333333;        /* Dark text/accents */
-        --wave-accent: #ff6b00;      /* Orange accent */
-        --wave-green: #00a896;       /* Complementary green */
-        --wave-text: #444444;        /* Primary text */
-        --wave-light-text: #666666;   /* Secondary text */
-        --wave-border: #e0e0e0;      /* Border color */
+        --wave-green: #00a896;       /* Ocean green */
+        --wave-lightgreen: #5bc8af;  /* Light sea green */
+        --wave-sand: #f0e6d2;       /* Beach sand */
+        --wave-white: #ffffff;      /* Foam white */
+        --wave-dark: #0a3a2e;       /* Deep sea green */
+        --wave-accent: #ff8c42;     /* Sunset orange */
     }
 
     body {
-        font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+        font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
         display: flex;
         justify-content: center;
         align-items: center;
         min-height: 100vh;
-        background-color: var(--wave-bg);
+        background-color: var(--wave-lightgreen);
         margin: 0;
         padding: 20px;
-        color: var(--wave-text);
+        background-image: linear-gradient(to bottom, var(--wave-lightgreen), var(--wave-green));
     }
 
     .container {
-        background-color: var(--wave-card);
-        border-radius: 12px;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        background-color: var(--wave-white);
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
         padding: 30px;
         width: 340px;
         max-width: 100%;
         text-align: center;
-        border: 1px solid var(--wave-border);
+        border: 2px solid var(--wave-sand);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .container::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 8px;
+        background: linear-gradient(90deg, 
+            var(--wave-accent), 
+            var(--wave-green), 
+            var(--wave-lightgreen));
     }
 
     h1 {
         color: var(--wave-dark);
         margin-bottom: 25px;
-        font-size: 24px;
+        font-size: 26px;
         font-weight: 600;
-        letter-spacing: 0.5px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
     }
 
     .display {
-        background-color: var(--wave-bg);
-        border-radius: 8px;
+        background-color: var(--wave-sand);
+        border-radius: 10px;
         padding: 18px;
         margin-bottom: 25px;
-        font-size: 22px;
+        font-size: 24px;
         letter-spacing: 3px;
         height: 30px;
         color: var(--wave-dark);
-        border: 1px solid var(--wave-border);
+        border: 2px solid var(--wave-green);
         font-family: 'Courier New', monospace;
-        font-weight: 500;
+        font-weight: 600;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
     }
 
     .keypad {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 12px;
+        gap: 15px;
     }
 
     button {
-        padding: 16px;
-        font-size: 18px;
+        padding: 18px;
+        font-size: 20px;
         border: none;
-        border-radius: 8px;
-        background-color: var(--wave-bg);
+        border-radius: 10px;
+        background-color: var(--wave-white);
         color: var(--wave-dark);
         cursor: pointer;
         transition: all 0.3s ease;
-        font-weight: 500;
+        font-weight: 600;
+        border: 2px solid var(--wave-green);
         position: relative;
-        overflow: hidden;
     }
 
     button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 168, 150, 0.3);
+        background-color: var(--wave-lightgreen);
+        color: var(--wave-white);
     }
 
     button:active {
         transform: translateY(0);
     }
 
-    button::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0));
-        opacity: 0;
-        transition: opacity 0.3s;
-    }
-
-    button:hover::after {
-        opacity: 1;
-    }
-
     .clear {
         background-color: var(--wave-accent);
-        color: white;
+        color: var(--wave-white);
+        border-color: var(--wave-accent);
     }
 
     .clear:hover {
-        background-color: #e05e00;
+        background-color: #e07b38;
     }
 
     .enter {
         background-color: var(--wave-green);
-        color: white;
+        color: var(--wave-white);
+        border-color: var(--wave-green);
     }
 
     .enter:hover {
-        background-color: #009080;
+        background-color: #008a7a;
     }
 
-    /* Number buttons get a subtle green tint on hover */
-    button:not(.clear):not(.enter):hover {
-        background-color: #e8f5f4;
-        color: var(--wave-green);
-    }
-
-    .status {
-        margin-top: 20px;
-        padding: 12px;
-        border-radius: 8px;
-        display: none;
+    /* Number buttons get wave pattern on hover */
+    button:not(.clear):not(.enter):hover::after {
+        content: "~";
+        position: absolute;
+        bottom: 5px;
+        left: 0;
+        right: 0;
+        color: rgba(255,255,255,0.3);
         font-size: 14px;
     }
 
+    .status {
+        margin-top: 25px;
+        padding: 15px;
+        border-radius: 8px;
+        display: none;
+        font-size: 15px;
+        font-weight: 500;
+    }
+
     .success {
-        background-color: #e8f5f4;
+        background-color: rgba(0, 168, 150, 0.1);
         color: var(--wave-green);
-        border: 1px solid rgba(0, 168, 150, 0.3);
+        border: 2px solid rgba(0, 168, 150, 0.3);
         display: block;
     }
 
     .error {
-        background-color: #ffebee;
-        color: #e53935;
-        border: 1px solid rgba(229, 57, 53, 0.3);
+        background-color: rgba(175, 26, 26, 0.1);
+        color: #af1a1a;
+        border: 2px solid rgba(175, 26, 26, 0.3);
         display: block;
     }
 
     .loading {
         display: inline-block;
-        width: 18px;
-        height: 18px;
+        width: 20px;
+        height: 20px;
         border: 3px solid rgba(0, 168, 150, 0.2);
         border-radius: 50%;
         border-top-color: var(--wave-green);
@@ -173,17 +180,17 @@
     /* Responsive adjustments */
     @media (max-width: 400px) {
         .container {
-            padding: 24px;
+            padding: 25px;
             width: 300px;
         }
         
         button {
-            padding: 14px;
-            font-size: 16px;
+            padding: 16px;
+            font-size: 18px;
         }
         
         h1 {
-            font-size: 22px;
+            font-size: 24px;
         }
     }
 </style>
