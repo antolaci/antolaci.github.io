@@ -178,45 +178,42 @@
             enterBtn.disabled = show;
         }
         
-        async function checkCode() {
-            if (!currentInput) return;
-            
-            showLoading(true);
-            hideStatus();
-            
-            try {
-                const response = await fetch(WEB_APP_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ 
-                        action: "validate_code",
-                        code: currentInput 
-                    }),
-                });
-                
-                const result = await response.json();
-                
-                if (!response.ok) {
-                    throw new Error(result.message || "Server error");
-                }
-                
-                showStatus(
-                    result.success ? 
-                    `Access granted! ${result.message || ""}` : 
-                    result.message || "Invalid code",
-                    result.success
-                );
-                
-            } catch (error) {
-                console.error("Error:", error);
-                showStatus(error.message || "Failed to validate code", false);
-            } finally {
-                showLoading(false);
-                setTimeout(clearDisplay, 2000);
-            }
-        }
+async function checkCode() {
+  if (!currentInput) return;
+
+  showLoading(true);
+  hideStatus();
+
+  try {
+    const response = await fetch(WEB_APP_URL, {
+      method: 'POST',
+      mode: 'no-cors', // Disable CORS (for simple requests)
+      headers: {
+        'Content-Type': 'text/plain', // Avoid CORS preflight
+      },
+      body: JSON.stringify({ 
+        action: "validate_code",
+        code: currentInput 
+      }),
+    });
+
+    // Handle non-JSON responses (Google Apps Script quirks)
+    const text = await response.text();
+    const result = JSON.parse(text);
+
+    if (!result.success) {
+      throw new Error(result.message || "Invalid code");
+    }
+
+    showStatus(`Access granted!`, true);
+  } catch (error) {
+    console.error("Fetch error:", error);
+    showStatus("Error: " + error.message, false);
+  } finally {
+    showLoading(false);
+    setTimeout(clearDisplay, 2000);
+  }
+}
     </script>
 </body>
 </html>
