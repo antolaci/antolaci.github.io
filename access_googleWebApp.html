@@ -264,7 +264,7 @@ async function checkCode() {
   showLoading(true);
   hideStatus();
 
-  try {
+ try {
     const response = await fetch(WEB_APP_URL, {
       method: 'POST',
       headers: {
@@ -274,12 +274,11 @@ async function checkCode() {
         action: "validate_code",
         code: currentInput 
       }),
-      credentials: 'omit' // Important for CORS
+      // No need for 'credentials: 'omit'' since we're properly handling CORS
     });
 
-    // First check if the request even completed
     if (!response.ok) {
-      throw new Error(`Server returned ${response.status} ${response.statusText}`);
+      throw new Error(`Server returned ${response.status}`);
     }
 
     const result = await response.json();
