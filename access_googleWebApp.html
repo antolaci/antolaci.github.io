@@ -264,25 +264,28 @@ async function checkCode() {
   showLoading(true);
   hideStatus();
 
- try {
+  try {
     const response = await fetch(WEB_APP_URL, {
       method: 'POST',
+      mode: 'no-cors', // Disable CORS (for simple requests)
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'text/plain', // Avoid CORS preflight
       },
       body: JSON.stringify({ 
         action: "validate_code",
         code: currentInput 
       }),
-      // No need for 'credentials: 'omit'' since we're properly handling CORS
     });
 
-    if (!response.ok) {
-      throw new Error(`Server returned ${response.status}`);
+// First check if response is empty
+    const responseText = await response.text();
+    if (!responseText) {
+      throw new Error("Empty response from server");
     }
 
-    const result = await response.json();
-    
+    // Then parse as JSON
+    const result = JSON.parse(responseText);
+
     if (!result.success) {
       throw new Error(result.message || "Invalid code");
     }
