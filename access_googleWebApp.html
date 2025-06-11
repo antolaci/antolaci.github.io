@@ -267,33 +267,34 @@ async function checkCode() {
   try {
     const response = await fetch(WEB_APP_URL, {
       method: 'POST',
-      mode: 'no-cors', // Disable CORS (for simple requests)
-      headers: {
-        'Content-Type': 'text/plain', // Avoid CORS preflight
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ 
         action: "validate_code",
         code: currentInput 
       }),
     });
 
-// First check if response is empty
+    // First get response as text
     const responseText = await response.text();
-    if (!responseText) {
-      throw new Error("Empty response from server");
+    
+    // Check if response is empty
+    if (!responseText.trim()) {
+      throw new Error("Server returned empty response");
     }
-
-    // Then parse as JSON
+    
+    // Parse JSON
     const result = JSON.parse(responseText);
-
-    if (!result.success) {
-      throw new Error(result.message || "Invalid code");
+    
+    // Handle response
+    if (result.success) {
+      showStatus(result.message || "Access granted!", true);
+    } else {
+      throw new Error(result.message || "Access denied");
     }
-
-    showStatus(`Access granted!`, true);
+    
   } catch (error) {
-    console.error("Fetch error:", error);
-    showStatus("Error: " + error.message, false);
+    console.error("Error:", error);
+    showStatus(error.message, false);
   } finally {
     showLoading(false);
     setTimeout(clearDisplay, 2000);
