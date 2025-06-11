@@ -1,6 +1,0 @@
-fastapi==0.95.2
-uvicorn==0.22.0
-httpx==0.24.1
-python-dotenv==1.0.0
-redis==4.5.5
-slowapi==0.1.8  # Alternative to fastapi-limiter
