@@ -273,15 +273,16 @@ async function checkCode() {
       body: JSON.stringify({ 
         action: "validate_code",
         code: currentInput 
-      }),
+      })
     });
 
+    // First check if the request even completed
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      throw new Error(`Server returned ${response.status} ${response.statusText}`);
     }
 
     const result = await response.json();
-
+    
     if (!result.success) {
       throw new Error(result.message || "Invalid code");
     }
