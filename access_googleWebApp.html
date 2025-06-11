@@ -273,7 +273,8 @@ async function checkCode() {
       body: JSON.stringify({ 
         action: "validate_code",
         code: currentInput 
-      })
+      }),
+      credentials: 'omit' // Important for CORS
     });
 
     // First check if the request even completed
