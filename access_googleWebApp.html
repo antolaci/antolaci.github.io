@@ -267,34 +267,29 @@ async function checkCode() {
   try {
     const response = await fetch(WEB_APP_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({ 
         action: "validate_code",
         code: currentInput 
       }),
     });
 
-    // First get response as text
-    const responseText = await response.text();
-    
-    // Check if response is empty
-    if (!responseText.trim()) {
-      throw new Error("Server returned empty response");
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
-    
-    // Parse JSON
-    const result = JSON.parse(responseText);
-    
-    // Handle response
-    if (result.success) {
-      showStatus(result.message || "Access granted!", true);
-    } else {
-      throw new Error(result.message || "Access denied");
+
+    const result = await response.json();
+
+    if (!result.success) {
+      throw new Error(result.message || "Invalid code");
     }
-    
+
+    showStatus(`Access granted!`, true);
   } catch (error) {
-    console.error("Error:", error);
-    showStatus(error.message, false);
+    console.error("Fetch error:", error);
+    showStatus("Error: " + error.message, false);
   } finally {
     showLoading(false);
     setTimeout(clearDisplay, 2000);
