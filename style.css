@@ -1,0 +1,346 @@
+:root {
+  --wave-green: #00a896;
+  --wave-lightgreen: #5bc8af;
+  --wave-sand: #f0e6d2;
+  --wave-white: #ffffff;
+  --wave-dark: #0a3a2e;
+  --wave-accent: #ff8c42;
+  --wave-lightgray: #f5f5f5;
+  --wave-border: #e0e0e0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--wave-sand);
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  color: var(--wave-dark);
+  line-height: 1.6;
+}
+
+.form-container {
+  background: var(--wave-white);
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  max-width: 800px;
+  width: 100%;
+  margin: 20px auto;
+}
+
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  border-bottom: 2px solid var(--wave-lightgreen);
+  padding-bottom: 15px;
+}
+
+.form-header h2 {
+  margin: 0;
+  color: var(--wave-dark);
+  font-size: 28px;
+}
+
+#lang-switcher {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--wave-lightgreen);
+  background: var(--wave-white);
+  color: var(--wave-dark);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.form-section {
+  margin-bottom: 30px;
+  padding: 20px;
+  border-radius: 12px;
+  background: var(--wave-lightgray);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+}
+
+.form-section h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--wave-lightgreen);
+  color: var(--wave-dark);
+  font-size: 20px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--wave-dark);
+}
+
+input, select {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid var(--wave-border);
+  border-radius: 8px;
+  background: var(--wave-white);
+  font-size: 1rem;
+  transition: border 0.3s ease;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--wave-lightgreen);
+  box-shadow: 0 0 0 2px rgba(91, 200, 175, 0.2);
+}
+
+canvas {
+  border: 1px solid var(--wave-border);
+  border-radius: 8px;
+  background: var(--wave-white);
+  margin-bottom: 15px;
+  cursor: pointer;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.signature-container {
+  background: var(--wave-white);
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid var(--wave-border);
+}
+
+.btn-primary, .btn-secondary {
+  padding: 14px 25px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-block;
+  text-align: center;
+}
+
+.btn-primary {
+  background: var(--wave-accent);
+  color: white;
+  width: 100%;
+  margin-top: 10px;
+  box-shadow: 0 4px 12px rgba(255, 140, 66, 0.25);
+}
+
+.btn-primary:hover {
+  background: #e67a38;
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background: var(--wave-lightgray);
+  color: var(--wave-dark);
+  border: 1px solid var(--wave-border);
+}
+
+.btn-secondary:hover {
+  background: #e0e0e0;
+}
+
+@media (max-width: 768px) {
+  .form-container {
+    padding: 20px;
+  }
+  
+  .form-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  #lang-switcher {
+    margin-top: 15px;
+    align-self: flex-end;
+  }
+  
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 10px;
+  }
+  
+  .form-container {
+    padding: 15px;
+  }
+  
+  .form-section {
+    padding: 15px;
+  }
+}
+
+
+/* Legal disclaimer */
+.legal-disclaimer {
+  margin: 20px 0;
+  padding: 15px;
+  background-color: rgba(91, 200, 175, 0.1);
+  border-left: 4px solid var(--wave-green);
+  border-radius: 4px;
+  font-size: 0.85rem;
+  color: var(--wave-dark);
+}
+
+/* Signature controls */
+.signature-container {
+  background: var(--wave-white);
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid var(--wave-border);
+}
+
+.signature-container canvas {
+  margin-bottom: 10px;
+}
+
+.signature-controls {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Submit container */
+.submit-container {
+  position: relative;
+  margin-top: 20px;
+}
+
+/* Spinner */
+.spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: var(--wave-white);
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.hidden {
+  display: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .signature-container {
+    padding: 15px;
+  }
+  
+  .legal-disclaimer {
+    font-size: 0.8rem;
+  }
+}
+
+/* ... previous styles ... */
+
+/* Legal disclaimer */
+.legal-disclaimer {
+  margin: 20px 0;
+  padding: 15px;
+  background-color: rgba(91, 200, 175, 0.1);
+  border-left: 4px solid var(--wave-green);
+  border-radius: 4px;
+  font-size: 0.85rem;
+  color: var(--wave-dark);
+}
+
+/* Signature controls */
+.signature-container {
+  background: var(--wave-white);
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid var(--wave-border);
+  position: relative; /* For absolute positioning of clear button */
+}
+
+.signature-container canvas {
+  margin-bottom: 10px;
+}
+
+.signature-controls {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+
+/* Submit container */
+.submit-container {
+  position: relative;
+  margin-top: 20px;
+}
+
+/* Spinner */
+.spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: var(--wave-white);
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.hidden {
+  display: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .signature-container {
+    padding: 15px;
+  }
+  
+  .signature-controls {
+    position: static;
+    margin-top: 10px;
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .legal-disclaimer {
+    font-size: 0.8rem;
+  }
+}

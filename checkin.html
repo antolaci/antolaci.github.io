@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title data-i18n="title">Guest Check-In</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="form-container">
+    <div class="form-header">
+      <h2 data-i18n="formTitle">Guest Check-In</h2>
+      <select id="lang-switcher">
+        <option value="en">English</option>
+        <option value="es">Español</option>
+        <option value="fr">Français</option>
+        <option value="de">Deutsch</option>
+      </select>
+    </div>
+    
+    <form id="checkin-form">
+      <div class="form-section">
+        <h3 data-i18n="personalInfo">Personal Information</h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label data-i18n="fullName">Full Name</label>
+            <input type="text" name="name" required />
+          </div>
+          
+          <div class="form-group">
+            <label data-i18n="surname">Surname</label>
+            <input type="text" name="surname1" required />
+          </div>
+          
+          <div class="form-group">
+            <label data-i18n="secondSurname">Second Surname</label>
+            <input type="text" name="surname2" />
+          </div>
+          
+          <div class="form-group">
+            <label data-i18n="documentId">ID / Passport Number</label>
+            <input type="text" name="document" required />
+          </div>
+          
+          <div class="form-group">
+            <label data-i18n="documentType">Document Type</label>
+            <select name="documentType" required>
+              <option value="">Select</option>
+              <option value="DNI">DNI</option>
+              <option value="NIE">NIE</option>
+              <option value="PAS">Passport</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label data-i18n="email">Email</label>
+            <input type="email" name="email" required />
+          </div>
+          
+          <div class="form-group">
+            <label data-i18n="phone">Phone Number</label>
+            <input type="tel" name="phone" />
+          </div>
+          
+          <div class="form-group">
+            <label data-i18n="dob">Date of Birth</label>
+            <input type="date" name="dob" required />
+          </div>
+          
+          <div class="form-group">
+            <label data-i18n="nationality">Nationality</label>
+            <input type="text" name="nationality" placeholder="e.g. ESP" required />
+          </div>
+          
+          <div class="form-group">
+            <label data-i18n="gender">Gender</label>
+            <select name="gender" required>
+              <option value="">Select</option>
+              <option value="M">Male</option>
+              <option value="F">Female</option>
+              <option value="O">Other</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-section">
+        <h3 data-i18n="addressInfo">Address Information</h3>
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label data-i18n="address">Address</label>
+            <input type="text" name="address" required />
+          </div>
+          
+          <div class="form-group">
+            <label data-i18n="city">City</label>
+            <input type="text" name="city" required />
+          </div>
+          
+          <div class="form-group">
+            <label data-i18n="province">Province</label>
+            <input type="text" name="province" required />
+          </div>
+          
+          <div class="form-group">
+            <label data-i18n="postalCode">Postal Code</label>
+            <input type="text" name="postalCode" required />
+          </div>
+          
+          <div class="form-group">
+            <label data-i18n="country">Country</label>
+            <input type="text" name="country" placeholder="ISO Alpha-3" required />
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-section">
+        <h3 data-i18n="signature">Signature</h3>
+        <div class="signature-container">
+          <canvas id="signature-pad" width="300" height="150"></canvas>
+          <div class="signature-controls">
+            <button type="button" class="btn-secondary" onclick="clearSignature()" data-i18n="clear">Clear Signature</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="legal-disclaimer">
+        <p data-i18n="legalText">This information is collected to comply with Spanish law, specifically Real Decreto 933/2021, which mandates the recording and communication of certain data for security purposes.</p>
+      </div>
+      
+      <div class="submit-container">
+        <button type="submit" class="btn-primary" id="submit-btn" data-i18n="submit">Submit</button>
+        <div class="spinner hidden" id="spinner"></div>
+      </div>
+    </form>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
