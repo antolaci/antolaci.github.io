@@ -3,8 +3,229 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title data-i18n="title">Guest Check-In</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Guest Check-In</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --secondary: #64748b;
+      --light: #f8fafc;
+      --dark: #0f172a;
+      --border: #cbd5e1;
+      --success: #10b981;
+      --error: #ef4444;
+      --radius: 8px;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background-color: #f1f5f9;
+      color: var(--dark);
+      padding: 20px;
+      min-height: 100vh;
+    }
+    
+    .form-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    
+    .form-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      background: var(--primary);
+      color: white;
+    }
+    
+    .form-header h2 {
+      font-weight: 600;
+    }
+    
+    #lang-switcher {
+      padding: 8px 12px;
+      border-radius: var(--radius);
+      border: none;
+      background: white;
+      color: var(--dark);
+      font-weight: 500;
+      cursor: pointer;
+    }
+    
+    form {
+      padding: 20px;
+    }
+    
+    .form-section {
+      margin-bottom: 25px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .form-section:last-child {
+      border-bottom: none;
+    }
+    
+    .form-section h3 {
+      margin-bottom: 15px;
+      color: var(--primary);
+      font-size: 1.2rem;
+    }
+    
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+    }
+    
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .full-width {
+      grid-column: 1 / -1;
+    }
+    
+    label {
+      margin-bottom: 5px;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+    
+    input, select {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 1rem;
+    }
+    
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+    
+    .signature-container {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 15px;
+    }
+    
+    #signature-pad {
+      width: 100%;
+      height: 150px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: #f8fafc;
+      touch-action: none; /* Critical for mobile touch events */
+    }
+    
+    .signature-controls {
+      margin-top: 10px;
+      display: flex;
+      justify-content: flex-end;
+    }
+    
+    .btn-secondary {
+      background: var(--secondary);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-weight: 500;
+    }
+    
+    .btn-secondary:hover {
+      background: #475569;
+    }
+    
+    .legal-disclaimer {
+      margin: 20px 0;
+      padding: 15px;
+      background: #f1f5f9;
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+    
+    .submit-container {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: background 0.2s;
+    }
+    
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+    
+    .btn-primary:disabled {
+      background: #94a3b8;
+      cursor: not-allowed;
+    }
+    
+    .spinner {
+      width: 24px;
+      height: 24px;
+      border: 3px solid rgba(37, 99, 235, 0.2);
+      border-top: 3px solid var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    .hidden {
+      display: none;
+    }
+    
+    .signature-instruction {
+      color: var(--secondary);
+      font-size: 0.9rem;
+      margin-top: 5px;
+      text-align: center;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    @media (max-width: 600px) {
+      .form-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+      }
+      
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="form-container">
@@ -118,6 +339,7 @@
         <h3 data-i18n="signature">Signature</h3>
         <div class="signature-container">
           <canvas id="signature-pad" width="300" height="150"></canvas>
+          <p class="signature-instruction" data-i18n="signatureInstruction">Sign in the box above</p>
           <div class="signature-controls">
             <button type="button" class="btn-secondary" onclick="clearSignature()" data-i18n="clear">Clear Signature</button>
           </div>
@@ -136,6 +358,333 @@
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="script.js"></script>
+  <script>
+    // Updated translations with all fields and languages
+    const translations = {
+      en: {
+        title: "Guest Check-In",
+        formTitle: "Guest Check-In",
+        personalInfo: "Personal Information",
+        addressInfo: "Address Information",
+        fullName: "Name",
+        surname: "Surname",
+        secondSurname: "Second Surname",
+        documentId: "ID / Passport Number",
+        documentType: "Document Type",
+        email: "Email",
+        phone: "Phone Number",
+        dob: "Date of Birth",
+        nationality: "Nationality",
+        gender: "Gender",
+        address: "Address",
+        city: "City",
+        province: "Province",
+        postalCode: "Postal Code",
+        country: "Country",
+        signature: "Signature",
+        signatureInstruction: "Sign in the box above",
+        clear: "Clear Signature",
+        submit: "Submit",
+        legalText: "This information is collected to comply with Spanish law, specifically Real Decreto 933/2021, which mandates the recording and communication of certain data for security purposes."
+      },
+      es: {
+        title: "Registro de Huéspedes",
+        formTitle: "Registro de Huéspedes",
+        personalInfo: "Información Personal",
+        addressInfo: "Información de Dirección",
+        fullName: "Nombre",
+        surname: "Apellido",
+        secondSurname: "Segundo apellido",
+        documentId: "DNI / Pasaporte",
+        documentType: "Tipo de documento",
+        email: "Correo electrónico",
+        phone: "Teléfono",
+        dob: "Fecha de nacimiento",
+        nationality: "Nacionalidad",
+        gender: "Género",
+        address: "Dirección",
+        city: "Ciudad",
+        province: "Provincia",
+        postalCode: "Código postal",
+        country: "País",
+        signature: "Firma",
+        signatureInstruction: "Firme en el cuadro de arriba",
+        clear: "Borrar firma",
+        submit: "Enviar",
+        legalText: "Esta información se recopila para cumplir con la ley española, específicamente el Real Decreto 933/2021, que exige el registro y comunicación de ciertos datos con fines de seguridad."
+      },
+      fr: {
+        title: "Enregistrement des Invités",
+        formTitle: "Enregistrement des Invités",
+        personalInfo: "Informations Personnelles",
+        addressInfo: "Informations d'Adresse",
+        fullName: "Nom",
+        surname: "Nom de famille",
+        secondSurname: "Deuxième nom de famille",
+        documentId: "Carte d'identité / Passeport",
+        documentType: "Type de document",
+        email: "Email",
+        phone: "Numéro de téléphone",
+        dob: "Date de naissance",
+        nationality: "Nationalité",
+        gender: "Genre",
+        address: "Adresse",
+        city: "Ville",
+        province: "Province",
+        postalCode: "Code postal",
+        country: "Pays",
+        signature: "Signature",
+        signatureInstruction: "Signez dans la case ci-dessus",
+        clear: "Effacer la signature",
+        submit: "Soumettre",
+        legalText: "Ces informations sont collectées pour se conformer à la loi espagnole, en particulier le Real Decreto 933/2021, qui exige l'enregistrement et la communication de certaines données à des fins de sécurité."
+      },
+      de: {
+        title: "Gast-Check-in",
+        formTitle: "Gast-Check-in",
+        personalInfo: "Persönliche Informationen",
+        addressInfo: "Adressinformationen",
+        fullName: "Name",
+        surname: "Nachname",
+        secondSurname: "Zweiter Nachname",
+        documentId: "Ausweis-/Reisepassnummer",
+        documentType: "Dokumententyp",
+        email: "E-Mail",
+        phone: "Telefonnummer",
+        dob: "Geburtsdatum",
+        nationality: "Staatsangehörigkeit",
+        gender: "Geschlecht",
+        address: "Adresse",
+        city: "Stadt",
+        province: "Provinz",
+        postalCode: "Postleitzahl",
+        country: "Land",
+        signature: "Unterschrift",
+        signatureInstruction: "Unterschreiben Sie im Feld oben",
+        clear: "Unterschrift löschen",
+        submit: "Einreichen",
+        legalText: "Diese Informationen werden gemäß dem spanischen Gesetz, insbesondere dem Real Decreto 933/2021, erhoben, das die Aufzeichnung und Übermittlung bestimmter Daten zu Sicherheitszwecken vorschreibt."
+      }
+    };
+
+    function applyTranslations(lang) {
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        if (translations[lang][key]) {
+          el.textContent = translations[lang][key];
+        }
+      });
+    }
+
+    document.getElementById("lang-switcher").addEventListener("change", e => {
+      applyTranslations(e.target.value);
+    });
+    applyTranslations("en");
+
+    // Signature pad functionality with mobile support
+    const form = document.getElementById('checkin-form');
+    const canvas = document.getElementById('signature-pad');
+    const ctx = canvas.getContext('2d');
+    let drawing = false;
+    
+    // Fix canvas size for high DPI screens
+    const resizeCanvas = () => {
+      const ratio = window.devicePixelRatio || 1;
+      canvas.width = canvas.offsetWidth * ratio;
+      canvas.height = canvas.offsetHeight * ratio;
+      ctx.scale(ratio, ratio);
+      clearSignature();
+    };
+    
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    
+    // Function to get canvas coordinates from event
+    const getCoordinates = (event) => {
+      const rect = canvas.getBoundingClientRect();
+      let x, y;
+      
+      if (event.type.includes('mouse')) {
+        x = event.clientX - rect.left;
+        y = event.clientY - rect.top;
+      } else if (event.touches) {
+        x = event.touches[0].clientX - rect.left;
+        y = event.touches[0].clientY - rect.top;
+      }
+      
+      return { x, y };
+    };
+    
+    // Start drawing
+    const startDrawing = (event) => {
+      drawing = true;
+      const { x, y } = getCoordinates(event);
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      event.preventDefault(); // Prevent scrolling on mobile
+    };
+    
+    // Draw
+    const draw = (event) => {
+      if (!drawing) return;
+      
+      const { x, y } = getCoordinates(event);
+      ctx.lineTo(x, y);
+      ctx.stroke();
+      event.preventDefault(); // Prevent scrolling on mobile
+    };
+    
+    // Stop drawing
+    const stopDrawing = () => {
+      drawing = false;
+    };
+    
+    // Mouse events
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stopDrawing);
+    canvas.addEventListener('mouseout', stopDrawing);
+    
+    // Touch events for mobile
+    canvas.addEventListener('touchstart', startDrawing);
+    canvas.addEventListener('touchmove', draw);
+    canvas.addEventListener('touchend', stopDrawing);
+    
+    function clearSignature() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#f8fafc';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 2;
+      ctx.lineCap = 'round';
+    }
+    
+    clearSignature();
+
+    // Updated form submit handler with improved PDF generation
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      // Show spinner and disable button
+      const submitBtn = document.getElementById('submit-btn');
+      const spinner = document.getElementById('spinner');
+      submitBtn.disabled = true;
+      spinner.classList.remove('hidden');
+      
+      try {
+        const formData = new FormData(form);
+        const signatureDataUrl = canvas.toDataURL();
+        const lang = document.getElementById('lang-switcher').value;
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        
+        // Add form title
+        doc.setFontSize(16);
+        doc.text(translations[lang].formTitle, 105, 15, null, null, 'center');
+        doc.setFontSize(12);
+        
+        // Personal Information section
+        doc.text(translations[lang].personalInfo + ":", 14, 25);
+        let y = 35;
+        
+        // Create a mapping of field names to human-readable labels
+        const labelMap = {
+          name: translations[lang].fullName,
+          surname1: translations[lang].surname,
+          surname2: translations[lang].secondSurname,
+          document: translations[lang].documentId,
+          documentType: translations[lang].documentType,
+          email: translations[lang].email,
+          phone: translations[lang].phone,
+          dob: translations[lang].dob,
+          nationality: translations[lang].nationality,
+          gender: translations[lang].gender
+        };
+        
+        // Add personal info fields
+        for (const [key, label] of Object.entries(labelMap)) {
+          const value = formData.get(key) || 'N/A';
+          doc.text(`${label}: ${value}`, 20, y);
+          y += 8;
+        }
+        
+        // Address Information section
+        y += 5;
+        doc.text(translations[lang].addressInfo + ":", 14, y);
+        y += 10;
+        
+        const addressLabelMap = {
+          address: translations[lang].address,
+          city: translations[lang].city,
+          province: translations[lang].province,
+          postalCode: translations[lang].postalCode,
+          country: translations[lang].country
+        };
+        
+        // Add address fields
+        for (const [key, label] of Object.entries(addressLabelMap)) {
+          const value = formData.get(key) || 'N/A';
+          doc.text(`${label}: ${value}`, 20, y);
+          y += 8;
+        }
+        
+        // Signature section
+        y += 10;
+        doc.text(translations[lang].signature + ":", 14, y);
+        y += 8;
+        doc.addImage(signatureDataUrl, 'PNG', 20, y, 80, 40);
+        y += 45;
+        
+        // Legal disclaimer
+        doc.setFontSize(10);
+        doc.text(translations[lang].legalText, 14, y, { maxWidth: 180 });
+        
+        // Generate filename
+        const guestName = formData.get('name');
+        const guestDOB = formData.get('dob');
+        const filename = `CheckIn_${guestName.replace(/\s+/g, '_')}_${guestDOB}.pdf`;
+        
+        // Convert to blob
+        const pdfBlob = doc.output('blob');
+        
+        // Convert blob to base64
+        const base64Pdf = await new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result.split(',')[1]);
+          reader.readAsDataURL(pdfBlob);
+        });
+
+
+		// Upload to Google Drive via Apps Script
+		const uploadResponse = await fetch("https://script.google.com/macros/s/AKfycbwmnSIcC_Lx5LBbh-Z8VPdsLnhe-a6c2HXr9eNBDFNScEs5EyRQyLx4svxjPn61UKj7YA/exec", {
+		  method: "POST",
+		  headers: {
+			"Content-Type": "application/x-www-form-urlencoded"
+		  },
+		  body: new URLSearchParams({
+			filename: filename,
+			mimeType: "application/pdf",
+			data: base64Pdf
+		  })
+    });
+        
+		const responseText = await uploadResponse.text();
+		
+		if (responseText.includes("Success")) {
+		  alert("Form submitted successfully!");
+		  form.reset();
+		  clearSignature();
+		} else {
+		  alert("Error: " + responseText);
+		}
+	  } catch (error) {
+		alert("An error occurred: " + error.message);
+	  } finally {
+		// Hide spinner and re-enable button
+		spinner.classList.add('hidden');
+		submitBtn.disabled = false;
+	  }
+    });
+  </script>
 </body>
 </html>
