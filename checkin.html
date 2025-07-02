@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Guest Check-In</title>
+  <title>Guest Check-In System</title>
   <style>
     :root {
       --primary: #2563eb;
@@ -26,19 +26,44 @@
     }
     
     body {
-      background-color: #f1f5f9;
+      background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
       color: var(--dark);
       padding: 20px;
       min-height: 100vh;
     }
     
-    .form-container {
-      max-width: 800px;
+    .container {
+      max-width: 1000px;
       margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 20px;
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    
+    .header h1 {
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+    
+    .header p {
+      color: var(--secondary);
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    
+    .form-container {
       background: white;
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       overflow: hidden;
+      margin-bottom: 30px;
     }
     
     .form-header {
@@ -82,6 +107,12 @@
       margin-bottom: 15px;
       color: var(--primary);
       font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+    }
+    
+    .form-section h3 i {
+      margin-right: 10px;
     }
     
     .form-grid {
@@ -103,6 +134,13 @@
       margin-bottom: 5px;
       font-weight: 500;
       font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+    }
+    
+    label i {
+      margin-right: 8px;
+      color: var(--secondary);
     }
     
     input, select {
@@ -130,7 +168,7 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       background: #f8fafc;
-      touch-action: none; /* Critical for mobile touch events */
+      touch-action: none;
     }
     
     .signature-controls {
@@ -147,10 +185,12 @@
       border-radius: var(--radius);
       cursor: pointer;
       font-weight: 500;
+      transition: all 0.3s ease;
     }
     
     .btn-secondary:hover {
       background: #475569;
+      transform: translateY(-2px);
     }
     
     .legal-disclaimer {
@@ -166,6 +206,7 @@
       display: flex;
       align-items: center;
       gap: 15px;
+      flex-wrap: wrap;
     }
     
     .btn-primary {
@@ -177,16 +218,38 @@
       cursor: pointer;
       font-weight: 600;
       font-size: 1rem;
-      transition: background 0.2s;
+      transition: all 0.3s ease;
     }
     
     .btn-primary:hover {
       background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(37, 99, 235, 0.2);
     }
     
     .btn-primary:disabled {
       background: #94a3b8;
       cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    
+    .btn-success {
+      background: var(--success);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-success:hover {
+      background: #0d9e6d;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(16, 185, 129, 0.2);
     }
     
     .spinner {
@@ -209,12 +272,54 @@
       text-align: center;
     }
     
+    .guest-counter {
+      background: var(--primary);
+      color: white;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      margin-left: 10px;
+    }
+    
+    .system-info {
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 20px;
+      margin-top: 20px;
+    }
+    
+    .system-info h3 {
+      margin-bottom: 15px;
+      color: var(--primary);
+    }
+    
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 15px;
+    }
+    
+    .feature {
+      background: #f8fafc;
+      padding: 15px;
+      border-radius: var(--radius);
+      text-align: center;
+    }
+    
+    .feature i {
+      font-size: 2rem;
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+    
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
     
-    @media (max-width: 600px) {
+    @media (max-width: 768px) {
       .form-header {
         flex-direction: column;
         gap: 15px;
@@ -224,137 +329,156 @@
       .form-grid {
         grid-template-columns: 1fr;
       }
+      
+      .submit-container {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      
+      .btn-primary, .btn-success {
+        width: 100%;
+      }
     }
   </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-  <div class="form-container">
-    <div class="form-header">
-      <h2 data-i18n="formTitle">Guest Check-In</h2>
-      <select id="lang-switcher">
-        <option value="en">English</option>
-        <option value="es">Español</option>
-        <option value="fr">Français</option>
-        <option value="de">Deutsch</option>
-      </select>
+  <div class="container">
+    <div class="header">
+      <h1><i class="fas fa-hotel"></i> TWT Guests Check-In</h1>
+      <p>All guests need to fill in this form to check-in</p>
     </div>
     
-    <form id="checkin-form">
-      <div class="form-section">
-        <h3 data-i18n="personalInfo">Personal Information</h3>
-        <div class="form-grid">
-          <div class="form-group">
-            <label data-i18n="fullName">Full Name</label>
-            <input type="text" name="name" required />
-          </div>
-          
-          <div class="form-group">
-            <label data-i18n="surname">Surname</label>
-            <input type="text" name="surname1" required />
-          </div>
-          
-          <div class="form-group">
-            <label data-i18n="secondSurname">Second Surname</label>
-            <input type="text" name="surname2" />
-          </div>
-          
-          <div class="form-group">
-            <label data-i18n="documentId">ID / Passport Number</label>
-            <input type="text" name="document" required />
-          </div>
-          
-          <div class="form-group">
-            <label data-i18n="documentType">Document Type</label>
-            <select name="documentType" required>
-              <option value="">Select</option>
-              <option value="DNI">DNI</option>
-              <option value="NIE">NIE</option>
-              <option value="PAS">Passport</option>
-            </select>
-          </div>
-          
-          <div class="form-group">
-            <label data-i18n="email">Email</label>
-            <input type="email" name="email" required />
-          </div>
-          
-          <div class="form-group">
-            <label data-i18n="phone">Phone Number</label>
-            <input type="tel" name="phone" />
-          </div>
-          
-          <div class="form-group">
-            <label data-i18n="dob">Date of Birth</label>
-            <input type="date" name="dob" required />
-          </div>
-          
-          <div class="form-group">
-            <label data-i18n="nationality">Nationality</label>
-            <input type="text" name="nationality" placeholder="e.g. ESP" required />
-          </div>
-          
-          <div class="form-group">
-            <label data-i18n="gender">Gender</label>
-            <select name="gender" required>
-              <option value="">Select</option>
-              <option value="M">Male</option>
-              <option value="F">Female</option>
-              <option value="O">Other</option>
-            </select>
+    <div class="form-container">
+      <div class="form-header">
+        <h2><i class="fas fa-user-check"></i> <span data-i18n="formTitle">Guest Check-In</span> <span class="guest-counter">Guests: <span id="guest-count">0</span></span></h2>
+        <select id="lang-switcher">
+          <option value="en">English</option>
+          <option value="es">Español</option>
+          <option value="fr">Français</option>
+          <option value="de">Deutsch</option>
+        </select>
+      </div>
+      
+      <form id="checkin-form">
+        <div class="form-section">
+          <h3><i class="fas fa-user-circle"></i> <span data-i18n="personalInfo">Personal Information</span></h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label><i class="fas fa-signature"></i> <span data-i18n="fullName">Full Name</span></label>
+              <input type="text" name="name" required />
+            </div>
+            
+            <div class="form-group">
+              <label><i class="fas fa-id-card"></i> <span data-i18n="surname">Surname</span></label>
+              <input type="text" name="surname1" required />
+            </div>
+            
+            <div class="form-group">
+              <label><i class="fas fa-id-card-alt"></i> <span data-i18n="secondSurname">Second Surname</span></label>
+              <input type="text" name="surname2" />
+            </div>
+            
+            <div class="form-group">
+              <label><i class="fas fa-passport"></i> <span data-i18n="documentId">ID / Passport Number</span></label>
+              <input type="text" name="document" required />
+            </div>
+            
+            <div class="form-group">
+              <label><i class="fas fa-file-alt"></i> <span data-i18n="documentType">Document Type</span></label>
+              <select name="documentType" required>
+                <option value="">Select</option>
+                <option value="DNI">DNI</option>
+                <option value="NIE">NIE</option>
+                <option value="PAS">Passport</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label><i class="fas fa-envelope"></i> <span data-i18n="email">Email</span></label>
+              <input type="email" name="email" required />
+            </div>
+            
+            <div class="form-group">
+              <label><i class="fas fa-phone"></i> <span data-i18n="phone">Phone Number</span></label>
+              <input type="tel" name="phone" />
+            </div>
+            
+            <div class="form-group">
+              <label><i class="fas fa-birthday-cake"></i> <span data-i18n="dob">Date of Birth</span></label>
+              <input type="date" name="dob" required />
+            </div>
+            
+            <div class="form-group">
+              <label><i class="fas fa-flag"></i> <span data-i18n="nationality">Nationality</span></label>
+              <input type="text" name="nationality" placeholder="e.g. ESP" required />
+            </div>
+            
+            <div class="form-group">
+              <label><i class="fas fa-venus-mars"></i> <span data-i18n="gender">Gender</span></label>
+              <select name="gender" required>
+                <option value="">Select</option>
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+                <option value="O">Other</option>
+              </select>
+            </div>
           </div>
         </div>
-      </div>
-      
-      <div class="form-section">
-        <h3 data-i18n="addressInfo">Address Information</h3>
-        <div class="form-grid">
-          <div class="form-group full-width">
-            <label data-i18n="address">Address</label>
-            <input type="text" name="address" required />
-          </div>
-          
-          <div class="form-group">
-            <label data-i18n="city">City</label>
-            <input type="text" name="city" required />
-          </div>
-          
-          <div class="form-group">
-            <label data-i18n="province">Province</label>
-            <input type="text" name="province" required />
-          </div>
-          
-          <div class="form-group">
-            <label data-i18n="postalCode">Postal Code</label>
-            <input type="text" name="postalCode" required />
-          </div>
-          
-          <div class="form-group">
-            <label data-i18n="country">Country</label>
-            <input type="text" name="country" placeholder="ISO Alpha-3" required />
-          </div>
-        </div>
-      </div>
-      
-      <div class="form-section">
-        <h3 data-i18n="signature">Signature</h3>
-        <div class="signature-container">
-          <canvas id="signature-pad" width="300" height="150"></canvas>
-          <p class="signature-instruction" data-i18n="signatureInstruction">Sign in the box above</p>
-          <div class="signature-controls">
-            <button type="button" class="btn-secondary" onclick="clearSignature()" data-i18n="clear">Clear Signature</button>
+        
+        <div class="form-section">
+          <h3><i class="fas fa-map-marker-alt"></i> <span data-i18n="addressInfo">Address Information</span></h3>
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label><i class="fas fa-home"></i> <span data-i18n="address">Address</span></label>
+              <input type="text" name="address" required />
+            </div>
+            
+            <div class="form-group">
+              <label><i class="fas fa-city"></i> <span data-i18n="city">City</span></label>
+              <input type="text" name="city" required />
+            </div>
+            
+            <div class="form-group">
+              <label><i class="fas fa-map"></i> <span data-i18n="province">Province</span></label>
+              <input type="text" name="province" required />
+            </div>
+            
+            <div class="form-group">
+              <label><i class="fas fa-mail-bulk"></i> <span data-i18n="postalCode">Postal Code</span></label>
+              <input type="text" name="postalCode" required />
+            </div>
+            
+            <div class="form-group">
+              <label><i class="fas fa-globe"></i> <span data-i18n="country">Country</span></label>
+              <input type="text" name="country" placeholder="" required />
+            </div>
           </div>
         </div>
-      </div>
-      
-      <div class="legal-disclaimer">
-        <p data-i18n="legalText">This information is collected to comply with Spanish law, specifically Real Decreto 933/2021, which mandates the recording and communication of certain data for security purposes.</p>
-      </div>
-      
-      <div class="submit-container">
-        <button type="submit" class="btn-primary" id="submit-btn" data-i18n="submit">Submit</button>
-        <div class="spinner hidden" id="spinner"></div>
-      </div>
-    </form>
+        
+        <div class="form-section">
+          <h3><i class="fas fa-signature"></i> <span data-i18n="signature">Signature</span></h3>
+          <div class="signature-container">
+            <canvas id="signature-pad" width="300" height="150"></canvas>
+            <p class="signature-instruction" data-i18n="signatureInstruction">Sign in the box above</p>
+            <div class="signature-controls">
+              <button type="button" class="btn-secondary" onclick="clearSignature()" data-i18n="clear">Clear Signature</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="legal-disclaimer">
+          <p data-i18n="legalText">This information is collected to comply with Spanish law, specifically Real Decreto 933/2021, which mandates the recording and communication of certain data for security purposes.</p>
+        </div>
+        
+        <div class="submit-container">
+          <button type="submit" class="btn-primary" id="submit-btn" data-i18n="submit">Submit</button>
+          <button type="button" class="btn-success hidden" id="add-another-btn" data-i18n="addAnother">Add Another Guest</button>
+          <div class="spinner hidden" id="spinner"></div>
+        </div>
+      </form>
+    </div>
+   
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -385,6 +509,7 @@
         signatureInstruction: "Sign in the box above",
         clear: "Clear Signature",
         submit: "Submit",
+        addAnother: "Add Another Guest",
         legalText: "This information is collected to comply with Spanish law, specifically Real Decreto 933/2021, which mandates the recording and communication of certain data for security purposes."
       },
       es: {
@@ -411,6 +536,7 @@
         signatureInstruction: "Firme en el cuadro de arriba",
         clear: "Borrar firma",
         submit: "Enviar",
+        addAnother: "Añadir Otro Huésped",
         legalText: "Esta información se recopila para cumplir con la ley española, específicamente el Real Decreto 933/2021, que exige el registro y comunicación de ciertos datos con fines de seguridad."
       },
       fr: {
@@ -437,6 +563,7 @@
         signatureInstruction: "Signez dans la case ci-dessus",
         clear: "Effacer la signature",
         submit: "Soumettre",
+        addAnother: "Ajouter un Autre Invité",
         legalText: "Ces informations sont collectées pour se conformer à la loi espagnole, en particulier le Real Decreto 933/2021, qui exige l'enregistrement et la communication de certaines données à des fins de sécurité."
       },
       de: {
@@ -463,6 +590,7 @@
         signatureInstruction: "Unterschreiben Sie im Feld oben",
         clear: "Unterschrift löschen",
         submit: "Einreichen",
+        addAnother: "Weiteren Gast hinzufügen",
         legalText: "Diese Informationen werden gemäß dem spanischen Gesetz, insbesondere dem Real Decreto 933/2021, erhoben, das die Aufzeichnung und Übermittlung bestimmter Daten zu Sicherheitszwecken vorschreibt."
       }
     };
@@ -481,6 +609,10 @@
     });
     applyTranslations("en");
 
+    // Initialize guest counter
+    let guestCount = 0;
+    const guestCountElement = document.getElementById('guest-count');
+    
     // Signature pad functionality with mobile support
     const form = document.getElementById('checkin-form');
     const canvas = document.getElementById('signature-pad');
@@ -561,7 +693,16 @@
     
     clearSignature();
 
-    // Updated form submit handler with improved PDF generation
+    // Add Another Guest button functionality
+    const addAnotherBtn = document.getElementById('add-another-btn');
+    addAnotherBtn.addEventListener('click', function() {
+      form.reset();
+      clearSignature();
+      this.classList.add('hidden');
+      document.getElementById('submit-btn').disabled = false;
+    });
+
+    // Updated form submit handler
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       
@@ -641,8 +782,10 @@
         
         // Generate filename
         const guestName = formData.get('name');
-        const guestDOB = formData.get('dob');
-        const filename = `CheckIn_${guestName.replace(/\s+/g, '_')}_${guestDOB}.pdf`;
+        const guestSurname = formData.get('surname1');
+        const today = new Date();
+        const timestamp = today.toISOString().split('T')[0];
+        const filename = `${guestSurname.replace(/\s+/g, '_')}_${guestName.replace(/\s+/g, '_')}_${timestamp}.pdf`;
         
         // Convert to blob
         const pdfBlob = doc.output('blob');
@@ -653,37 +796,43 @@
           reader.onloadend = () => resolve(reader.result.split(',')[1]);
           reader.readAsDataURL(pdfBlob);
         });
-
-
+		
 		// Upload to Google Drive via Apps Script
 		const uploadResponse = await fetch("https://script.google.com/macros/s/AKfycbwmnSIcC_Lx5LBbh-Z8VPdsLnhe-a6c2HXr9eNBDFNScEs5EyRQyLx4svxjPn61UKj7YA/exec", {
 		  method: "POST",
 		  headers: {
 			"Content-Type": "application/x-www-form-urlencoded"
 		  },
-		  body: new URLSearchParams({
-			filename: filename,
-			mimeType: "application/pdf",
-			data: base64Pdf
-		  })
-    });
-        
+		body: new URLSearchParams({
+		  filename: filename,
+		  mimeType: "application/pdf",
+		  data: base64Pdf,
+		  name: formData.get('name'),
+		  surname1: formData.get('surname1')
+		})
+		});
+
 		const responseText = await uploadResponse.text();
 		
 		if (responseText.includes("Success")) {
-		  alert("Form submitted successfully!");
-		  form.reset();
+			alert(`${translations[lang].formTitle} submitted successfully for ${guestName} ${guestSurname}!`);		  
+			form.reset();
 		  clearSignature();
 		} else {
 		  alert("Error: " + responseText);
 		}
 	  } catch (error) {
 		alert("An error occurred: " + error.message);
+		spinner.classList.add('hidden');
+        submitBtn.disabled = false;
 	  } finally {
 		// Hide spinner and re-enable button
-		spinner.classList.add('hidden');
-		submitBtn.disabled = false;
+          spinner.classList.add('hidden');
+          guestCount++;
+          guestCountElement.textContent = guestCount;
+          addAnotherBtn.classList.remove('hidden');
 	  }
+        
     });
   </script>
 </body>
