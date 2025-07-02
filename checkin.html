@@ -700,6 +700,10 @@
       clearSignature();
       this.classList.add('hidden');
       document.getElementById('submit-btn').disabled = false;
+	  window.scroll({
+	  top:0,
+	  behavior: "smooth",
+	  });
     });
 
     // Updated form submit handler
