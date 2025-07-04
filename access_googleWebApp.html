@@ -216,54 +216,56 @@
         <div class="status" id="status"></div>
     </div>
 
-    <script>
-        // Replace with your Google Apps Script Web App URL
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyxWeG0dEO-riJTkpEMEClPUH_R9zL4MXnHtcFJZ-iaTAeXwNt39XJQIFizFwEZXaQc/exec";
-        
-        let currentInput = "";
-        const display = document.getElementById('display');
-        const statusDiv = document.getElementById('status');
-        const enterBtn = document.getElementById('enterBtn');
-        
-        function appendNumber(num) {
-            if (currentInput.length < 4) {
-                currentInput += num;
-                updateDisplay();
-            }
-        }
-        
-        function clearDisplay() {
-            currentInput = "";
-            updateDisplay();
-            hideStatus();
-        }
-        
-        function updateDisplay() {
-            display.textContent = currentInput ? "*".repeat(currentInput.length) : "Enter Code";
-        }
-        
-        function hideStatus() {
-            statusDiv.style.display = "none";
-            statusDiv.className = "status";
-        }
-        
-        function showStatus(message, isSuccess) {
-            statusDiv.textContent = message;
-            statusDiv.className = isSuccess ? "status success" : "status error";
-            statusDiv.style.display = "block";
-        }
-        
-        function showLoading(show) {
-            enterBtn.innerHTML = show ? '<span class="loading"></span> Processing' : 'Enter';
-            enterBtn.disabled = show;
-        }
-        
-async function checkCode() {
+<script>
+  // Replace with your Google Apps Script Web App URL
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyxWeG0dEO-riJTkpEMEClPUH_R9zL4MXnHtcFJZ-iaTAeXwNt39XJQIFizFwEZXaQc/exec";
+  
+  let currentInput = "";
+  const display = document.getElementById('display');
+  const statusDiv = document.getElementById('status');
+  const enterBtn = document.getElementById('enterBtn');
+  
+  function appendNumber(num) {
+    if (currentInput.length < 4) {
+      currentInput += num;
+      updateDisplay();
+    }
+  }
+  
+  function clearDisplay() {
+    currentInput = "";
+    updateDisplay();
+    hideStatus();
+  }
+  
+  function updateDisplay() {
+    display.textContent = currentInput ? "*".repeat(currentInput.length) : "Enter Code";
+  }
+  
+  function hideStatus() {
+    statusDiv.style.display = "none";
+    statusDiv.className = "status";
+  }
+  
+  function showStatus(message, isSuccess) {
+    statusDiv.textContent = message;
+    statusDiv.className = isSuccess ? "status success" : "status error";
+    statusDiv.style.display = "block";
+  }
+  
+  function showLoading(show) {
+    enterBtn.innerHTML = show ? '<span class="loading"></span> Processing' : 'Enter';
+    enterBtn.disabled = show;
+  }
+  
+  async function checkCode() {
     if (!currentInput) return;
+    
     showLoading(true);
     hideStatus();
-
+    
     try {
+      // Send request to Google Apps Script
       const response = await fetch(WEB_APP_URL, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -273,20 +275,22 @@ async function checkCode() {
         }),
       });
       
+      // Handle response
       const result = await response.json();
       
       if (result.success) {
         showStatus(result.message, true);
       } else {
-        throw new Error(result.message);
+        showStatus(result.message, false);
       }
     } catch (error) {
-      showStatus(error.message, false);
+      console.error("Error:", error);
+      showStatus("Connection error. Please try again.", false);
     } finally {
       showLoading(false);
       setTimeout(clearDisplay, 2000);
     }
   }
-    </script>
+</script>
 </body>
 </html>
